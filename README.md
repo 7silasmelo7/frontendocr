@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🔍 OCR Inteligente
 
-First, run the development server:
+**Frontend moderno para extração de texto em imagens e PDFs**
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
+[![Axios](https://img.shields.io/badge/Axios-1.20-5a29e4?style=flat-square&logo=axios)](https://axios-http.com)
+
+</div>
+
+---
+
+## ✨ Visão Geral
+
+Interface web responsiva para um **sistema de OCR** (Reconhecimento Óptico de Caracteres) que se comunica com uma API Flask backend. Permite enviar imagens e PDFs, visualizar o texto extraído, gerenciar o histórico de conversões e muito mais — tudo com suporte a **modo claro/escuro**.
+
+---
+
+## 🚀 Funcionalidades
+
+| Recurso | Descrição |
+|---|---|
+| 📤 **Upload de arquivos** | Envio de imagens e PDFs para processamento via OCR |
+| 📝 **Visualização do texto** | Exibição e edição do texto extraído em tempo real |
+| 🖼️ **Preview da imagem** | Visualização da imagem processada diretamente no dashboard |
+| 📜 **Histórico paginado** | Listagem de todos os OCRs realizados com busca por nome |
+| ✏️ **Edição de registros** | Atualização do texto extraído por ID |
+| 🗑️ **Exclusão de registros** | Remoção de entradas do histórico |
+| ⬇️ **Download** | Exportação do texto extraído ou da imagem original |
+| 🌙 **Modo escuro** | Alternância entre tema claro e escuro |
+| 📡 **Status da API** | Monitoramento em tempo real da conexão com o backend |
+
+---
+
+## 🏗️ Estrutura do Projeto
+
+```
+frontend-next/
+├── app/
+│   ├── layout.tsx          # Layout raiz da aplicação
+│   ├── page.tsx            # Página inicial (landing)
+│   ├── globals.css         # Estilos globais
+│   └── ocr/
+│       ├── page.tsx        # Dashboard principal de OCR
+│       ├── loading.tsx     # Componente de carregamento
+│       ├── components/
+│       │   ├── HistoryTable.tsx   # Tabela do histórico
+│       │   ├── Loader.tsx         # Indicador de loading
+│       │   ├── PreviewBox.tsx     # Preview da imagem
+│       │   ├── ThemeToggle.tsx    # Botão de tema
+│       │   └── UploadBox.tsx      # Área de upload
+│       └── hooks/
+│           └── useOCR.ts          # Hook customizado de OCR
+├── public/                 # Assets estáticos
+├── next.config.ts          # Configuração do Next.js
+├── tailwind.config.js      # Configuração do Tailwind
+├── tsconfig.json           # Configuração do TypeScript
+└── package.json
+```
+
+---
+
+## ⚙️ Pré-requisitos
+
+- **Node.js** 18+
+- **npm** ou outro gerenciador de pacotes
+- **Backend Flask OCR** em execução em `http://127.0.0.1:8000`
+
+---
+
+## 🛠️ Instalação e Execução
+
+### 1. Clone o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd frontend-next
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+### 3. Inicie o servidor de desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Scripts Disponíveis
 
-## Learn More
+```bash
+npm run dev      # Servidor de desenvolvimento com hot reload
+npm run build    # Build de produção otimizado
+npm run start    # Inicia o servidor em modo produção
+npm run lint     # Análise estática de código com ESLint
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔌 Integração com a API
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+O frontend se comunica com o backend Flask via **REST API** em `http://127.0.0.1:8000`.
 
-## Deploy on Vercel
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/status` | Verifica o status da API |
+| `POST` | `/ocr` | Envia arquivo para processamento |
+| `GET` | `/ocr/paginado` | Lista histórico com paginação e busca |
+| `GET` | `/ocr/:id` | Busca um registro por ID |
+| `GET` | `/ocr/:id/texto` | Faz download do texto extraído |
+| `GET` | `/ocr/:id/imagem` | Faz download da imagem processada |
+| `PUT` | `/ocr/:id` | Atualiza o texto de um registro |
+| `DELETE` | `/ocr/:id` | Remove um registro |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧰 Stack Tecnológica
+
+- **[Next.js 16](https://nextjs.org)** — Framework React com App Router
+- **[React 19](https://react.dev)** — Biblioteca de UI com hooks modernos
+- **[TypeScript 5](https://www.typescriptlang.org)** — Tipagem estática
+- **[Tailwind CSS 3](https://tailwindcss.com)** — Estilização utility-first
+- **[Axios](https://axios-http.com)** — Cliente HTTP para comunicação com a API
+
+---
+
+## 🚢 Deploy
+
+A forma mais simples de fazer deploy é através da **[Vercel](https://vercel.com)**:
+
+```bash
+npx vercel
+```
+
+> Certifique-se de configurar a variável de ambiente com a URL do backend antes do deploy.
+
+---
+
+<div align="center">
+
+Desenvolvido por **Silas** &bull; Next.js + Tailwind + Flask OCR
+
+</div>
