@@ -2,12 +2,13 @@
 
 import { useOCR } from "../hooks/useOCR";
 import Loader from "./Loader";
+import { ChangeEvent } from "react";
 
 export default function UploadBox() {
   const { enviarArquivo, loading } = useOCR();
 
-  function handleUpload(e) {
-    const file = e.target.files[0];
+  function handleUpload(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
     if (file) enviarArquivo(file);
   }
 

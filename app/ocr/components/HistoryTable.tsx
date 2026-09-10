@@ -5,15 +5,25 @@ import axios from "axios";
 
 const API = "http://127.0.0.1:8000";
 
+interface HistoryItem {
+  id: number;
+  filename: string;
+  created_at: string;
+}
+
 export default function HistoryTable() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<HistoryItem[]>([]);
   const [busca, setBusca] = useState("");
 
   async function carregar(pagina = 1) {
-    const r = await axios.get(`${API}/ocr/paginado`, {
-      params: { pagina, limite: 10, busca }
-    });
-    setData(r.data.resultados);
+    try {
+      const r = await axios.get(`${API}/ocr/paginado`, {
+        params: { pagina, limite: 10, busca }
+      });
+      setData(r.data.resultados);
+    } catch {
+      console.log("Erro ao carregar histórico");
+    }
   }
 
   useEffect(() => {
@@ -29,31 +39,40 @@ export default function HistoryTable() {
         placeholder="Buscar..."
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && carregar(1)}
       />
 
       <button
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
+        className="px-4 py-2 bg-blue-600 text-white rounded mb-4 hover:bg-blue-700"
         onClick={() => carregar(1)}
       >
         Buscar
       </button>
 
-      <table className="w-full text-left">
+      <table className="w-full text-left text-sm">
         <thead>
-          <tr>
-            <th>ID</th>
+          <tr className="border-b dark:border-gray-600">
+            <th className="py-2">ID</th>
             <th>Arquivo</th>
             <th>Data</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
-            <tr key={item.id} className="border-t">
-              <td>{item.id}</td>
-              <td>{item.filename}</td>
-              <td>{item.created_at}</td>
+          {data.length > 0 ? (
+            data.map((item: HistoryItem) => (
+              <tr key={item.id} className="border-b dark:border-gray-600">
+                <td className="py-2">{item.id}</td>
+                <td>{item.filename}</td>
+                <td>{item.created_at}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={3} className="py-4 text-center text-gray-500">
+                Nenhum registro encontrado.
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

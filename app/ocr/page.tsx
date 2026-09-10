@@ -6,7 +6,6 @@ import axios from "axios";
 const API = "http://127.0.0.1:8000";
 
 export default function OCRDashboard() {
-  
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState("light");
   const [status, setStatus] = useState("");
@@ -24,20 +23,22 @@ export default function OCRDashboard() {
   const [updateMsg, setUpdateMsg] = useState("");
   const [deleteMsg, setDeleteMsg] = useState("");
 
-  
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     checkStatus();
     carregarPaginado(1);
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  
   if (!mounted) {
-    return <div className="p-6 text-gray-500">Carregando...</div>;
+    return (
+      <div suppressHydrationWarning className="p-6 text-gray-500">
+        Carregando...
+      </div>
+    );
   }
 
-  
   function toggleTheme() {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   }
@@ -148,13 +149,12 @@ export default function OCRDashboard() {
     }
   }
 
-  
   return (
-    <div className={theme === "dark" ? "dark" : ""}>
-      <div className="min-h-screen p-6 space-y-6 bg-gray-50 text-black dark:bg-gray-900 dark:text-white transition-colors">
+    <div suppressHydrationWarning className={theme === "dark" ? "dark" : ""}>
+      <div suppressHydrationWarning className="min-h-screen p-6 space-y-6 bg-gray-50 text-black dark:bg-gray-900 dark:text-white transition-colors">
         {/* Header */}
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Dashboard </h1>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
           <button
             onClick={toggleTheme}
             className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-600 transition"
