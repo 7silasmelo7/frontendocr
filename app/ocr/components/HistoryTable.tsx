@@ -30,6 +30,21 @@ export default function HistoryTable() {
     carregar();
   }, []);
 
+  // Função robusta e correta para converter "YYYY-MM-DD HH:MM:SS" para "DD/MM/YYYY HH:MM:SS"
+  function formatarData(dataString: string) {
+    if (!dataString) return "";
+
+    const [dataPart, horaPart] = dataString.split(" ");
+    if (dataPart && dataPart.includes("-")) {
+      const [ano, mes, dia] = dataPart.split("-");
+      if (ano && mes && dia) {
+        return `${dia}/${mes}/${ano}${horaPart ? ` ${horaPart}` : ""}`;
+      }
+    }
+
+    return dataString;
+  }
+
   return (
     <div id="historico" className="p-6 bg-white dark:bg-gray-800 rounded shadow">
       <h2 className="text-xl font-semibold mb-3">Histórico</h2>
@@ -63,7 +78,7 @@ export default function HistoryTable() {
               <tr key={item.id} className="border-b dark:border-gray-600">
                 <td className="py-2">{item.id}</td>
                 <td>{item.filename}</td>
-                <td>{item.created_at}</td>
+                <td>{formatarData(item.created_at)}</td>
               </tr>
             ))
           ) : (
