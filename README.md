@@ -173,3 +173,25 @@ npx vercel
 Desenvolvido por **Silas** &bull; Next.js + Tailwind + Flask OCR
 
 </div>
+
+graph TD
+    %% Entidades externas
+    User((Usuário))
+    OCRSpace((API Externa<br>OCR.space))
+
+    %% Frontend
+    subgraph Frontend [Frontend - Docker Container]
+        Next[Interface Web<br>Next.js / React]
+    end
+
+    %% Backend
+    subgraph Backend [Backend - Docker Container]
+        Flask[API REST<br>Python / Flask]
+        SQLite[(Banco de Dados<br>SQLite)]
+    end
+
+    %% Fluxo de comunicação
+    User -- "Acessa no Navegador<br>(Porta 3000)" --> Next
+    Next -- "Requisições HTTP<br>(Axios)" --> Flask
+    Flask -- "Processamento<br>de Imagem" --> OCRSpace
+    Flask -- "Leitura e<br>Escrita" --> SQLite
