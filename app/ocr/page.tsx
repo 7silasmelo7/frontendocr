@@ -80,6 +80,8 @@ export default function OCRDashboard() {
     formData.append("arquivo", file);
 
     try {
+      const r = await axios.post(`${API}/ocr`, formData);
+      
       const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
       setOcrId(r.data.id);
       setResultado(textoContinuo);
