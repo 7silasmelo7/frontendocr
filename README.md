@@ -88,9 +88,10 @@ docker build -t app-ocr-frontend .
 ```bash
 docker run -p 3000:3000 --name meu-frontend-ocr app-ocr-frontend
 ```
+---
 
 A interface estará disponível em [http://localhost:3000](http://localhost:3000)no navegador.
----
+
 
 ## 🛠️ Instalação e Execução Local (Sem Docker)
 
