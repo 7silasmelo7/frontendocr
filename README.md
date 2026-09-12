@@ -55,10 +55,11 @@ frontend-next/
 │       │   └── UploadBox.tsx      # Área de upload
 │       └── hooks/
 │           └── useOCR.ts          # Hook customizado de OCR
-├── public/                 # Assets estáticos
+├── public/                 # Assets estáticos (inclui arquitetura.png)
 ├── next.config.ts          # Configuração do Next.js
 ├── tailwind.config.js      # Configuração do Tailwind
 ├── tsconfig.json           # Configuração do TypeScript
+├── Dockerfile              # Configuração do container Docker
 └── package.json
 ```
 
@@ -66,18 +67,37 @@ frontend-next/
 
 ## ⚙️ Pré-requisitos
 
-- **Node.js** 18+
+- **Node.js** 20.9.0 ou superior (Obrigatório para build do Next.js)
 - **npm** ou outro gerenciador de pacotes
 - **Backend Flask OCR** em execução em `http://127.0.0.1:8000`
 
 ---
 
-## 🛠️ Instalação e Execução
+## 🐳 Executando com Docker (Recomendado)
+
+Este projeto contém um Dockerfile configurado para rodar a aplicação Next.js em um container isolado, cumprindo os requisitos de conteinerização.
+
+### 1. Construa a imagem Docker:
+
+```bash
+docker build -t app-ocr-frontend .
+```
+
+### 2. Execute o container:
+
+```bash
+docker run -p 3000:3000 --name meu-frontend-ocr app-ocr-frontend
+```
+
+A interface estará disponível em [http://localhost:3000](http://localhost:3000)no navegador.
+---
+
+## 🛠️ Instalação e Execução Local (Sem Docker)
 
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
+git clone <https://github.com/7silasmelo7/frontendocr>
 cd frontend-next
 ```
 
