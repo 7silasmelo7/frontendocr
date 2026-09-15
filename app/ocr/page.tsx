@@ -2,9 +2,15 @@
 
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-
+import Image from "next/image";
 
 const API = "http://127.0.0.1:8000";
+
+interface HistoricoItem {
+  id: number;
+  filename: string;
+  created_at: string;
+}
 
 export default function OCRDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -16,7 +22,7 @@ export default function OCRDashboard() {
   const [preview, setPreview] = useState("");
   const [resultado, setResultado] = useState("");
   const [busca, setBusca] = useState("");
-  const [historico, setHistorico] = useState<any[]>([]);
+  const [historico, setHistorico] = useState<HistoricoItem[]>([]);
   const [paginacao, setPaginacao] = useState({ pagina: 1, total: 1 });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [mostrarHistorico, setMostrarHistorico] = useState(true);
@@ -172,6 +178,23 @@ export default function OCRDashboard() {
     }
   }
 
+  // Função para converter "YYYY-MM-DD" ou "YYYY-MM-DD HH:MM:SS" para "DD-MM-YYYY"
+  function formatarData(dataString: string) {
+    if (!dataString) return "-";
+
+    const [dataPart, horaPart] = dataString.split(" ");
+    
+    if (dataPart && dataPart.includes("-")) {
+      const [ano, mes, dia] = dataPart.split("-");
+      if (ano && mes && dia) {
+        // Retorna no formato dd-mm-yyyy (ou use "/" se preferir dd/mm/yyyy)
+        return `${dia}-${mes}-${ano}${horaPart ? ` ${horaPart}` : ""}`;
+      }
+    }
+    return dataString;
+  }
+
+
   return (
     <div suppressHydrationWarning className={theme === "dark" ? "dark" : ""}>
       <div suppressHydrationWarning className="min-h-screen p-6 space-y-6 bg-slate-100 text-slate-700 dark:bg-gray-900 dark:text-gray-200 transition-colors">
@@ -265,10 +288,13 @@ export default function OCRDashboard() {
               </p>
 
               {preview && (
-                <img
+                <Image
                   src={preview}
                   alt="Preview do OCR"
-                  className="mt-2 border rounded max-w-[300px]"
+                  width={300}
+                  height={400}
+                  className="mt-2 border rounded max-w-[300px] h-auto"
+                  unoptimized={true} // Adicione isso temporariamente se não quiser mexer no next.config.js
                 />
               )}
 
@@ -390,7 +416,7 @@ export default function OCRDashboard() {
                           <tr key={item.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
                             <td className="py-3 px-2 text-gray-800 dark:text-gray-200">{item.id}</td>
                               <td className="py-3 px-2 text-gray-800 dark:text-gray-200">{item.filename}</td>
-                              <td className="py-3 px-2 text-gray-500 dark:text-gray-400">{item.created_at}</td>
+                              <td className="py-3 px-2 text-gray-500 dark:text-gray-400">{formatarData(item.created_at)}</td>
                               <td className="py-3 px-2 text-center">
                                 <button
                                   onClick={() => ver(item.id)}

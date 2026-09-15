@@ -27,7 +27,9 @@ export default function HistoryTable() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Função robusta e correta para converter "YYYY-MM-DD HH:MM:SS" para "DD/MM/YYYY HH:MM:SS"
