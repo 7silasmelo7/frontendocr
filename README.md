@@ -65,6 +65,12 @@ frontend-next/
 
 ---
 
+## 🏛️ Arquiterura da Aplicação
+
+![App Screenshot](https://ibb.co/k2BXgNgj)
+
+---
+
 ## ⚙️ Pré-requisitos
 
 - **Node.js** 20.9.0 ou superior (Obrigatório para build do Next.js)
