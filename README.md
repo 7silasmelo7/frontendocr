@@ -67,7 +67,7 @@ frontend-next/
 
 ## 🏛️ Arquiterura da Aplicação
 
-![App Screenshot](https://ibb.co/k2BXgNgj)
+![App Screenshot](https://i.ibb.co/XxLtZcZ1/arquitetura.png)
 
 ---
 
