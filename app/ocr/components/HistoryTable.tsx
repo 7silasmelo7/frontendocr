@@ -32,7 +32,7 @@ export default function HistoryTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Função robusta e correta para converter "YYYY-MM-DD HH:MM:SS" para "DD/MM/YYYY HH:MM:SS"
+  // Função para converter "YYYY-MM-DD HH:MM:SS" para "DD/MM/YYYY HH:MM:SS"
   function formatarData(dataString: string) {
     if (!dataString) return "";
 

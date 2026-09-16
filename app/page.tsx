@@ -6,12 +6,12 @@ export default function Home() {
   return (
     <div className="relative flex flex-col min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden px-6 transition-colors">
       
-      {/* Elementos de fundo dinâmicos para contrastar com o vidro */}
+      {/* Elementos de fundo */}
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob dark:bg-blue-600/20"></div>
       <div className="absolute top-[20%] right-[-10%] w-96 h-96 bg-purple-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000 dark:bg-purple-600/20"></div>
       <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-pink-500/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000 dark:bg-pink-600/20"></div>
 
-      {/* Container principal com efeito Glassmorphism */}
+      {/* Container principal */}
       <main className="relative z-10 flex flex-col items-center text-center space-y-8 p-10 max-w-xl w-full bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border border-white/50 dark:border-gray-700/50 shadow-2xl rounded-3xl">
         
         <div className="space-y-4">
@@ -35,7 +35,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer reposicionado para fora do vidro */}
+      
       <footer className="relative z-10 text-sm font-medium text-gray-500 dark:text-gray-400 mt-12 bg-white/30 dark:bg-gray-800/30 px-6 py-2 rounded-full backdrop-blur-md border border-white/20 dark:border-gray-700/30">
         Desenvolvido por Silas — Next.js + Tailwind 3 + Flask OCR
       </footer>

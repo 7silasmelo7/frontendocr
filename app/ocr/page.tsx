@@ -178,7 +178,7 @@ export default function OCRDashboard() {
     }
   }
 
-  // Função para converter "YYYY-MM-DD" ou "YYYY-MM-DD HH:MM:SS" para "DD-MM-YYYY"
+  // Função para converter "YYYY-MM-DD" para "DD-MM-YYYY"
   function formatarData(dataString: string) {
     if (!dataString) return "-";
 
@@ -187,7 +187,7 @@ export default function OCRDashboard() {
     if (dataPart && dataPart.includes("-")) {
       const [ano, mes, dia] = dataPart.split("-");
       if (ano && mes && dia) {
-        // Retorna no formato dd-mm-yyyy (ou use "/" se preferir dd/mm/yyyy)
+        // Retorna no formato dd-mm-yyyy)
         return `${dia}-${mes}-${ano}${horaPart ? ` ${horaPart}` : ""}`;
       }
     }
@@ -294,7 +294,7 @@ export default function OCRDashboard() {
                   width={300}
                   height={400}
                   className="mt-2 border rounded max-w-[300px] h-auto"
-                  unoptimized={true} // Adicione isso temporariamente se não quiser mexer no next.config.js
+                  unoptimized={true} 
                 />
               )}
 
@@ -370,7 +370,7 @@ export default function OCRDashboard() {
               </div>
               
 
-              {/* Conteúdo do Histórico (Só aparece se mostrarHistorico for true) */}
+              {/* Conteúdo do Histórico */}
               {mostrarHistorico && (
                 <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
 
