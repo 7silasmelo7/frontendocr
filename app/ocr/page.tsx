@@ -99,6 +99,15 @@ export default function OCRDashboard() {
       return;
     }
 
+    // Pega e valida o token antes de enviar
+    const token = localStorage.getItem("token");
+    if (!token || token === "undefined" || token === "null") {
+      alert("Sessão expirada ou inválida. Faça login novamente.");
+      localStorage.removeItem("token");
+      router.push("/login");
+      return;
+    }
+
     setLoading(true);
     setResultado("");
     setPreview("");
@@ -108,17 +117,27 @@ export default function OCRDashboard() {
     formData.append("arquivo", file);
 
     try {
-      const r = await axios.post(`${API}/ocr`, formData);      
+      const r = await axios.post(`${API}/ocr`, formData, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+            
       const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
       setOcrId(r.data.id);
       setResultado(textoContinuo);
+      
       const imgRes = await axios.get(`${API}/ocr/${r.data.id}/imagem`, { 
-        responseType: 'blob' // Diz ao axios que a resposta é um arquivo (imagem)
+        responseType: 'blob',
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       });
       setPreview(URL.createObjectURL(imgRes.data));
       carregarPaginado(1);
-    } catch {
-      alert("Erro ao processar OCR.");
+    } catch (err: any) {
+      console.error("Erro no OCR:", err.response?.data || err.message);
+      alert(err.response?.data?.msg || "Erro ao processar OCR.");
     } finally {
       setLoading(false);
     }
