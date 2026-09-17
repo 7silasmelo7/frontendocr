@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const API = "http://127.0.0.1:8000";
 
@@ -13,6 +14,7 @@ interface HistoricoItem {
 }
 
 export default function OCRDashboard() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState("light");
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
@@ -44,6 +46,19 @@ export default function OCRDashboard() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    // 1. Tenta pegar o token do localStorage
+    const token = localStorage.getItem("token");
+
+    // 2. Se o token NÃO existir, redireciona para a página de login
+    if (!token) {
+      router.push("/login");
+      return; // O 'return' impede que o restante do código abaixo rode
+    }
+
+    // 3. Se o token existir, ensinamos o axios a usá-lo em todas as requisições
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    // 4. Só carrega os dados do dashboard se o usuário passar pela verificação
     checkStatus();
     carregarPaginado(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,6 +70,13 @@ export default function OCRDashboard() {
         Carregando...
       </div>
     );
+  }
+
+
+  function fazerLogout() {
+    localStorage.removeItem("token"); // Remove o crachá do navegador
+    delete axios.defaults.headers.common["Authorization"]; // Remove o cabeçalho do axios
+    router.push("/login"); // Manda de volta pro login
   }
 
   function toggleTheme() {
@@ -86,12 +108,14 @@ export default function OCRDashboard() {
     formData.append("arquivo", file);
 
     try {
-      const r = await axios.post(`${API}/ocr`, formData);
-      
+      const r = await axios.post(`${API}/ocr`, formData);      
       const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
       setOcrId(r.data.id);
       setResultado(textoContinuo);
-      setPreview(`${API}/ocr/${r.data.id}/imagem`);
+      const imgRes = await axios.get(`${API}/ocr/${r.data.id}/imagem`, { 
+        responseType: 'blob' // Diz ao axios que a resposta é um arquivo (imagem)
+      });
+      setPreview(URL.createObjectURL(imgRes.data));
       carregarPaginado(1);
     } catch {
       alert("Erro ao processar OCR.");
@@ -126,7 +150,10 @@ export default function OCRDashboard() {
       setOcrId(r.data.id);
       const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
       setResultado(textoContinuo);
-      setPreview(`${API}/ocr/${r.data.id}/imagem`);
+      const imgRes = await axios.get(`${API}/ocr/${r.data.id}/imagem`, { 
+        responseType: 'blob' 
+      });
+      setPreview(URL.createObjectURL(imgRes.data));
     } catch {
       alert("Erro ao buscar detalhes.");
       setResultado("Erro ao carregar o texto.");
@@ -135,14 +162,36 @@ export default function OCRDashboard() {
     }
   }
 
-  function baixarTexto() {
+  async function baixarTexto() {
     if (!ocrId) return alert("Nenhum ID selecionado.");
-    window.open(`${API}/ocr/${ocrId}/texto`, "_blank");
+    try {
+      const res = await axios.get(`${API}/ocr/${ocrId}/texto`, { responseType: 'blob' });
+      const url = URL.createObjectURL(res.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `texto_ocr_${ocrId}.txt`;
+      link.click();
+      URL.revokeObjectURL(url); // Limpa a memória
+    } catch {
+      alert("Erro ao baixar o texto.");
+    }
+    
   }
 
-  function baixarImagem() {
+  async function baixarImagem() {
     if (!ocrId) return alert("Nenhum ID selecionado.");
-    window.open(`${API}/ocr/${ocrId}/imagem`, "_blank");
+    try{
+      const res = await axios.get(`${API}/ocr/${ocrId}/imagem`, { responseType: 'blob' });
+      const url = URL.createObjectURL(res.data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `imagem_${ocrId}.jpg`;
+      link.click();
+      URL.revokeObjectURL(url); // Limpa a memória
+    } catch {
+      alert("Erro ao baixar a imagem.");
+    }
+    
   }
 
   async function atualizarTexto() {
@@ -207,6 +256,13 @@ export default function OCRDashboard() {
           >
             {theme === "light" ? "Modo Escuro" : "Modo Claro"}
           </button>
+          <button
+              onClick={fazerLogout}
+              className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"
+            >
+              Sair
+            </button>
+          
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
