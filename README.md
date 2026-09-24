@@ -104,7 +104,7 @@ graph TD
 
     %% Integração Externa
     subgraph External ["External Integration"]
-        OCRAPI["API OCR.space (External REST)"]
+        OCRAPI["API OCR.space - External REST"]
     end
 
     %% Conexões e Fluxos
@@ -118,7 +118,7 @@ graph TD
     
     AuthBP -->|Valida / Cria Usuários| DB
     OcrBP -->|Lê / Grava Registros| DB
-    OcrBP -->|Envia Arquivos (Multipart)| OCRAPI
+    OcrBP -->|Envia Arquivos Multipart| OCRAPI
 
     style Client fill:#f1f5f9,stroke:#cbd5e1,stroke-width:2px
     style Docker fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px
