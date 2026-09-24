@@ -67,7 +67,6 @@ frontend-next/
 
 ## 🏛️ Arquiterura da Aplicação
 
-![App Screenshot](https://i.ibb.co/XxLtZcZ1/arquitetura.png)
 
 ```mermaid
 graph TD
