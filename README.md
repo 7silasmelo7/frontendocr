@@ -72,24 +72,24 @@ frontend-next/
 ```mermaid
 graph TD
     %% Camada de Cliente / Frontend
-    subgraph Client ["Camada do cliente - Browser / Next.js"]
+    subgraph Client ["Client Layer - Browser / Next.js"]
         UI["Dashboard Next.js / React"]
         AuthUI["Página de Login / Cadastro"]
         Store["LocalStorage (JWT & Role)"]
     end
 
     %% Ecossistema Docker
-    subgraph Docker ["Ecossistema Docker e container"]
+    subgraph Docker ["🐳 Docker Ecosystem & Containers"]
         
-        subgraph FE_Container ["Container frontend (Port: 3000)"]
-            NextApp["Next.js App + Axios Client"]
+        subgraph FE_Container ["Frontend Container (Port: 3000)"]
+            NextApp["🐳 Next.js App + Axios Client"]
         end
 
-        subgraph BE_Container ["Container backend (Port: 8000)"]
-            FlaskCore["Flask App Principal - api.py"]
+        subgraph BE_Container ["Backend Container (Port: 8000)"]
+            FlaskCore["🐳 Flask App Principal - api.py"]
             SwaggerUI["Flasgger / Swagger Docs"]
             
-            subgraph Blueprints ["Modulo Blueprints"]
+            subgraph Blueprints ["Modular Blueprints"]
                 AuthBP["routes_auth.py (/auth)"]
                 OcrBP["routes_ocr.py (/ocr & /status)"]
             end
@@ -97,13 +97,13 @@ graph TD
             JWT["Flask-JWT-Extended Security"]
         end
 
-        subgraph Volume ["Volume Docker (Persistência)"]
+        subgraph Volume ["Docker Volume (Persistência)"]
             DB[(SQLite Database - ocr_results.db)]
         end
     end
 
     %% Integração Externa
-    subgraph External ["Integração externa"]
+    subgraph External ["External Integration"]
         OCRAPI["API OCR.space - External REST"]
     end
 
@@ -120,7 +120,7 @@ graph TD
     OcrBP -->|Lê / Grava Registros| DB
     OcrBP -->|Envia Arquivos Multipart| OCRAPI
 
-    %% Estilização aplicada (caixas e textos)
+    %% Estilização aplicada (caixas e textos em vermelho)
     style Client fill:#f1f5f9,stroke:#cbd5e1,stroke-width:2px,color:#dc2626
     style Docker fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:#dc2626
     style FE_Container fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#dc2626
