@@ -127,6 +127,7 @@ graph TD
     style BE_Container fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#dc2626
     style Volume fill:#fef9c3,stroke:#eab308,stroke-width:2px,color:#dc2626
     style External fill:#fae8ff,stroke:#d946ef,stroke-width:2px,color:#dc2626
+    style NodeName fill:#f9f,stroke:#dc2626,stroke-width:2px
     
     linkStyle default stroke:#dc2626,color:#dc2626;
 ```
