@@ -16,6 +16,7 @@ export default function Login() {
       
       // Salva o Token JWT gerado no armazenamento do navegador
       localStorage.setItem("token", r.data.token);
+      localStorage.setItem("role", r.data.role);
       
       // Configura o Axios para mandar esse token em todas as requisições futuras
       axios.defaults.headers.common["Authorization"] = `Bearer ${r.data.token}`;
