@@ -71,24 +71,24 @@ frontend-next/
 ```mermaid
 graph TD
     %% Camada de Cliente / Frontend
-    subgraph Client ["Client Layer - Browser / Next.js"]
+    subgraph Client ["Camada cliente - Browser / Next.js"]
         UI["Dashboard Next.js / React"]
         AuthUI["Página de Login / Cadastro"]
         Store["LocalStorage (JWT & Role)"]
     end
 
     %% Ecossistema Docker
-    subgraph Docker ["🐳 Docker Ecosystem & Containers"]
+    subgraph Docker ["🐳 Ecossistema Docker e container "]
         
-        subgraph FE_Container ["Frontend Container (Port: 3000)"]
-            NextApp["🐳 Next.js App + Axios Client"]
+        subgraph FE_Container ["🐳 Container frontend (Port: 3000)"]
+            NextApp["Next.js App + Axios Client"]
         end
 
-        subgraph BE_Container ["Backend Container (Port: 8000)"]
-            FlaskCore["🐳 Flask App Principal - api.py"]
+        subgraph BE_Container ["🐳 Backend Container (Port: 8000)"]
+            FlaskCore["Flask - api.py"]
             SwaggerUI["Flasgger / Swagger Docs"]
             
-            subgraph Blueprints ["Modular Blueprints"]
+            subgraph Blueprints ["Modulo Blueprints"]
                 AuthBP["routes_auth.py (/auth)"]
                 OcrBP["routes_ocr.py (/ocr & /status)"]
             end
@@ -96,13 +96,13 @@ graph TD
             JWT["Flask-JWT-Extended Security"]
         end
 
-        subgraph Volume ["Docker Volume (Persistência)"]
+        subgraph Volume ["Volume docker (Persistência)"]
             DB[(SQLite Database - ocr_results.db)]
         end
     end
 
     %% Integração Externa
-    subgraph External ["External Integration"]
+    subgraph External ["Integração externa"]
         OCRAPI["API OCR.space - External REST"]
     end
 
