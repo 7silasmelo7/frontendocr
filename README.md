@@ -120,12 +120,15 @@ graph TD
     OcrBP -->|Lê / Grava Registros| DB
     OcrBP -->|Envia Arquivos Multipart| OCRAPI
 
-    style Client fill:#f1f5f9,stroke:#cbd5e1,stroke-width:2px
-    style Docker fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px
-    style FE_Container fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style BE_Container fill:#dcfce7,stroke:#22c55e,stroke-width:2px
-    style Volume fill:#fef9c3,stroke:#eab308,stroke-width:2px
-    style External fill:#fae8ff,stroke:#d946ef,stroke-width:2px
+    %% Estilização aplicada (cores dos nós e texto em vermelho)
+    style Client fill:#f1f5f9,stroke:#cbd5e1,stroke-width:2px,color:#dc2626
+    style Docker fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px,color:#dc2626
+    style FE_Container fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#dc2626
+    style BE_Container fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#dc2626
+    style Volume fill:#fef9c3,stroke:#eab308,stroke-width:2px,color:#dc2626
+    style External fill:#fae8ff,stroke:#d946ef,stroke-width:2px,color:#dc2626
+    
+    linkStyle default stroke:#dc2626,color:#dc2626;
 ```
 
 ---
