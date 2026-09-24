@@ -72,29 +72,29 @@ frontend-next/
 ```mermaid
 graph TD
     %% Camada de Cliente / Frontend
-    subgraph Client ["Client Layer (Browser / Next.js)"]
-        UI[Dashboard Next.js / React]
-        AuthUI[Página de Login / Cadastro]
-        Store[LocalStorage (JWT Token & Role)]
+    subgraph Client ["Client Layer - Browser / Next.js"]
+        UI["Dashboard Next.js / React"]
+        AuthUI["Página de Login / Cadastro"]
+        Store["LocalStorage (JWT & Role)"]
     end
 
     %% Ecossistema Docker
     subgraph Docker ["Docker Ecosystem & Containers"]
         
         subgraph FE_Container ["Frontend Container (Port: 3000)"]
-            NextApp[Next.js App + Axios Client]
+            NextApp["Next.js App + Axios Client"]
         end
 
         subgraph BE_Container ["Backend Container (Port: 8000)"]
-            FlaskCore[Flask App Principal - api.py]
-            SwaggerUI[Flasgger / Swagger Docs]
+            FlaskCore["Flask App Principal - api.py"]
+            SwaggerUI["Flasgger / Swagger Docs"]
             
             subgraph Blueprints ["Modular Blueprints"]
-                AuthBP[routes_auth.py (/auth)]
-                OcrBP[routes_ocr.py (/ocr & /status)]
+                AuthBP["routes_auth.py (/auth)"]
+                OcrBP["routes_ocr.py (/ocr & /status)"]
             end
             
-            JWT[Flask-JWT-Extended Security]
+            JWT["Flask-JWT-Extended Security"]
         end
 
         subgraph Volume ["Docker Volume (Persistência)"]
@@ -104,7 +104,7 @@ graph TD
 
     %% Integração Externa
     subgraph External ["External Integration"]
-        OCRAPI[API OCR.space (External REST)]
+        OCRAPI["API OCR.space (External REST)"]
     end
 
     %% Conexões e Fluxos
@@ -119,14 +119,13 @@ graph TD
     AuthBP -->|Valida / Cria Usuários| DB
     OcrBP -->|Lê / Grava Registros| DB
     OcrBP -->|Envia Arquivos (Multipart)| OCRAPI
-    
+
     style Client fill:#f1f5f9,stroke:#cbd5e1,stroke-width:2px
     style Docker fill:#e2e8f0,stroke:#94a3b8,stroke-width:2px
     style FE_Container fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
     style BE_Container fill:#dcfce7,stroke:#22c55e,stroke-width:2px
     style Volume fill:#fef9c3,stroke:#eab308,stroke-width:2px
     style External fill:#fae8ff,stroke:#d946ef,stroke-width:2px
-
 ```
 
 ---
