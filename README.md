@@ -40,7 +40,7 @@ Interface web responsiva para um **sistema de OCR** (Reconhecimento Óptico de C
 
 ```
 frontend-next/
-├──src/
+src/
 ├── app/
 │   ├── cadastro/
 │   │   └── page.tsx
@@ -64,6 +64,7 @@ frontend-next/
 └── services/
     ├── api.ts
     └── ocrService.ts
+
 
 ```
 
