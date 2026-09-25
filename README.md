@@ -40,27 +40,30 @@ Interface web responsiva para um **sistema de OCR** (Reconhecimento Óptico de C
 
 ```
 frontend-next/
+src/
 ├── app/
-│   ├── layout.tsx          # Layout raiz da aplicação
-│   ├── page.tsx            # Página inicial (landing)
-│   ├── globals.css         # Estilos globais
-│   └── ocr/
-│       ├── page.tsx        # Dashboard principal de OCR
-│       ├── loading.tsx     # Componente de carregamento
-│       ├── components/
-│       │   ├── HistoryTable.tsx   # Tabela do histórico
-│       │   ├── Loader.tsx         # Indicador de loading
-│       │   ├── PreviewBox.tsx     # Preview da imagem
-│       │   ├── ThemeToggle.tsx    # Botão de tema
-│       │   └── UploadBox.tsx      # Área de upload
-│       └── hooks/
-│           └── useOCR.ts          # Hook customizado de OCR
-├── public/                 # Assets estáticos (inclui arquitetura.png)
-├── next.config.ts          # Configuração do Next.js
-├── tailwind.config.js      # Configuração do Tailwind
-├── tsconfig.json           # Configuração do TypeScript
-├── Dockerfile              # Configuração do container Docker
-└── package.json
+│   ├── cadastro/
+│   │   └── page.tsx
+│   ├── login/
+│   │   └── page.tsx
+│   ├── ocr/
+│   │   └── page.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── HistoryTable.tsx
+│   ├── Loader.tsx
+│   ├── loading.tsx
+│   ├── PreviewBox.tsx
+│   ├── ThemeToggle.tsx
+│   └── UploadBox.tsx
+├── hooks/
+│   └── useOCR.ts
+└── services/
+    ├── api.ts
+    └── ocrService.ts
 ```
 
 ---

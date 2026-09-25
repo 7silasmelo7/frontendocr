@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import axios from "axios";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { ocrService } from "../../services/ocrService";
 
-// Instância centralizada do Axios para evitar repetição de headers
-const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
-});
+
 
 interface HistoricoItem {
   id: number;
@@ -38,7 +36,7 @@ export default function OCRDashboard() {
   const [updateMsg, setUpdateMsg] = useState("");
   const [deleteMsg, setDeleteMsg] = useState("");
 
-  // Redimensionamento automático do textarea
+  // Redimensionamento automático da area de texto, conforme o conteúdo muda
   useEffect(() => {
     if (textareaRef.current) {
       requestAnimationFrame(() => {
@@ -48,7 +46,7 @@ export default function OCRDashboard() {
     }
   }, [resultado]);
 
-  // Validação inicial do token, leitura da role e configuração do interceptor do Axios
+  // Validação inicial do token, leitura da role e configuração da Axios
   useEffect(() => {
     setMounted(true);
     const token = localStorage.getItem("token");
@@ -63,14 +61,7 @@ export default function OCRDashboard() {
       setUserRole(roleSalva); // Define o perfil no estado
     }
 
-    // Interceptor para injetar o token Bearer automaticamente em todas as requisições da instância `api`
-    api.interceptors.request.use((config) => {
-      const currentToken = localStorage.getItem("token");
-      if (currentToken) {
-        config.headers.Authorization = `Bearer ${currentToken}`;
-      }
-      return config;
-    });
+    
 
     checkStatus();
     carregarPaginado(1);
@@ -112,12 +103,14 @@ export default function OCRDashboard() {
 
   async function checkStatus() {
     try {
-      await api.get("/status");
+      await ocrService.verificarStatus();
       setIsOnline(true);
     } catch {
       setIsOnline(false);
     }
   }
+
+  
 
   async function enviarArquivo() {
     if (!file) {
@@ -130,28 +123,20 @@ export default function OCRDashboard() {
     setPreview("");
     setOcrId("");
 
-    const formData = new FormData();
-    formData.append("arquivo", file);
-
     try {
-      const r = await api.post("/ocr", formData);
-            
-      const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
-      setOcrId(r.data.id);
+      // Utilizando o serviço centralizado
+      const data = await ocrService.enviarArquivo(file);
+      
+      const textoContinuo = data.texto.replace(/\r?\n|\r/g, " ");
+      setOcrId(data.id);
       setResultado(textoContinuo);
       
-      const imgRes = await api.get(`/ocr/${r.data.id}/imagem`, { 
-        responseType: 'blob' 
-      });
-      setPreview(URL.createObjectURL(imgRes.data));
+      const imageBlob = await ocrService.obterImagemBlob(data.id);
+      setPreview(URL.createObjectURL(imageBlob));
       carregarPaginado(1);
     } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        console.error("Erro no OCR:", err.response?.data || err.message);
-        alert(err.response?.data?.erro || "Erro ao processar OCR.");
-      } else {
-        alert("Ocorreu um erro desconhecido.");
-      }
+      console.error("Erro no OCR:", err);
+      alert("Erro ao processar OCR.");
     } finally {
       setLoading(false);
     }
@@ -159,14 +144,12 @@ export default function OCRDashboard() {
 
   async function carregarPaginado(pagina = 1) {
     try {
-      const r = await api.get("/ocr/paginado", {
-        params: { pagina, limite: 10, busca },
-      });
+      const data = await ocrService.listarPaginado(pagina, 10, busca);
 
-      setHistorico(r.data.resultados);
+      setHistorico(data.resultados);
       setPaginacao({
-        pagina: r.data.pagina,
-        total: Math.ceil(r.data.total / r.data.limite),
+        pagina: data.pagina,
+        total: Math.ceil(data.total / data.limite),
       });
     } catch {
       console.log("Erro ao carregar histórico");
@@ -179,15 +162,13 @@ export default function OCRDashboard() {
     setPreview("");
 
     try {
-      const r = await api.get(`/ocr/${id}`);
-      setOcrId(r.data.id);
-      const textoContinuo = r.data.texto.replace(/\r?\n|\r/g, " ");
+      const data = await ocrService.obterDetalhes(id);
+      setOcrId(data.id);
+      const textoContinuo = data.texto.replace(/\r?\n|\r/g, " ");
       setResultado(textoContinuo);
       
-      const imgRes = await api.get(`/ocr/${r.data.id}/imagem`, { 
-        responseType: 'blob' 
-      });
-      setPreview(URL.createObjectURL(imgRes.data));
+      const imgBlob = await ocrService.obterImagemBlob(data.id);
+      setPreview(URL.createObjectURL(imgBlob));
     } catch {
       alert("Erro ao buscar detalhes.");
       setResultado("Erro ao carregar o texto.");
@@ -199,8 +180,8 @@ export default function OCRDashboard() {
   async function baixarTexto() {
     if (!ocrId) return alert("Nenhum ID selecionado.");
     try {
-      const res = await api.get(`/ocr/${ocrId}/texto`, { responseType: 'blob' });
-      const url = URL.createObjectURL(res.data);
+      const blob = await ocrService.obterTextoBlob(Number(ocrId));
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = `texto_ocr_${ocrId}.txt`;
@@ -214,8 +195,8 @@ export default function OCRDashboard() {
   async function baixarImagem() {
     if (!ocrId) return alert("Nenhum ID selecionado.");
     try {
-      const res = await api.get(`/ocr/${ocrId}/imagem`, { responseType: 'blob' });
-      const url = URL.createObjectURL(res.data);
+      const blob = await ocrService.obterImagemBlob(Number(ocrId));
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = `imagem_${ocrId}.jpg`;
@@ -233,16 +214,17 @@ export default function OCRDashboard() {
     }
 
     try {
-      const r = await api.put(`/ocr/${updateId}`, {
-        texto: updateTexto,
-      });
-
-      setUpdateMsg(r.data.mensagem || "Atualizado com sucesso!");
+      const res = await ocrService.atualizarTexto(updateId, updateTexto);
+      setUpdateMsg(res.mensagem || "Atualizado com sucesso!");
       carregarPaginado(1);
     } catch {
       setUpdateMsg("Erro ao atualizar o texto.");
     }
   }
+
+  
+
+   
 
   async function deletar() {
     if (!updateId) {
@@ -251,8 +233,8 @@ export default function OCRDashboard() {
     }
 
     try {
-      const r = await api.delete(`/ocr/${updateId}`);
-      setDeleteMsg(r.data.mensagem || "Removido com sucesso!");
+      const res = await ocrService.deletarRegistro(updateId);
+      setDeleteMsg(res.mensagem || "Removido com sucesso!");
       carregarPaginado(1);
     } catch {
       setDeleteMsg("Erro ao deletar o registro.");

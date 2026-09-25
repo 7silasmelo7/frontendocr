@@ -1,41 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-const API = "http://127.0.0.1:8000";
-
-interface HistoryItem {
-  id: number;
-  filename: string;
-  created_at: string;
-}
+import { ocrService, HistoricoItem } from "../services/ocrService";
 
 export default function HistoryTable() {
-  const [data, setData] = useState<HistoryItem[]>([]);
+  const [data, setData] = useState<HistoricoItem[]>([]);
   const [busca, setBusca] = useState("");
 
   async function carregar(pagina = 1) {
     try {
-      const r = await axios.get(`${API}/ocr/paginado`, {
-        params: { pagina, limite: 10, busca }
-      });
-      setData(r.data.resultados);
-    } catch {
-      console.log("Erro ao carregar histórico");
+      const res = await ocrService.listarPaginado(pagina, 10, busca);
+      setData(res.resultados);
+    } catch (err) {
+      console.error("Erro ao carregar histórico:", err);
     }
   }
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Função para converter "YYYY-MM-DD HH:MM:SS" para "DD/MM/YYYY HH:MM:SS"
   function formatarData(dataString: string) {
     if (!dataString) return "";
-
     const [dataPart, horaPart] = dataString.split(" ");
     if (dataPart && dataPart.includes("-")) {
       const [ano, mes, dia] = dataPart.split("-");
@@ -43,7 +29,6 @@ export default function HistoryTable() {
         return `${dia}/${mes}/${ano}${horaPart ? ` ${horaPart}` : ""}`;
       }
     }
-
     return dataString;
   }
 
@@ -76,7 +61,7 @@ export default function HistoryTable() {
         </thead>
         <tbody>
           {data.length > 0 ? (
-            data.map((item: HistoryItem) => (
+            data.map((item) => (
               <tr key={item.id} className="border-b dark:border-gray-600">
                 <td className="py-2">{item.id}</td>
                 <td>{item.filename}</td>

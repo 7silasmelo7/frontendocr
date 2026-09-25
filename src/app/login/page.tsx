@@ -11,7 +11,7 @@ export default function Login() {
   async function fazerLogin(e: React.FormEvent) {
     e.preventDefault();
     try {
-      // Faz a requisição para a nova rota que criamos no Flask
+      // Faz a requisição para a nova rota criada no Flask
       const r = await axios.post("http://127.0.0.1:8000/auth/login", { email, senha });
       
       // Salva o Token JWT gerado no armazenamento do navegador
@@ -22,7 +22,7 @@ export default function Login() {
       axios.defaults.headers.common["Authorization"] = `Bearer ${r.data.token}`;
       
       alert("Login efetuado!");
-      router.push("/"); // Redireciona para o seu Dashboard de OCR
+      router.push("/"); // Redireciona para o Dashboard
     } catch (err) {
       alert("Erro ao fazer login. Verifique suas credenciais.");
     }

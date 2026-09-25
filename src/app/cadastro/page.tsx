@@ -22,7 +22,7 @@ export default function Cadastro() {
     setLoading(true);
 
     try {
-      // Chama a rota de cadastro que criamos no Flask
+      // Chama a rota de cadastro criada no Flask
       const r = await axios.post("http://127.0.0.1:8000/auth/cadastro", {
         email,
         senha
@@ -33,7 +33,7 @@ export default function Cadastro() {
       // Manda o usuário para a tela de login após criar a conta
       router.push("/login"); 
     } catch (err: any) {
-      // Se o backend retornar erro (ex: e-mail já cadastrado)
+      // Se o backend retornar erro
       alert(err.response?.data?.erro || "Erro ao criar conta.");
     } finally {
       setLoading(false);
