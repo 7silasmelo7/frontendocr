@@ -83,13 +83,13 @@ graph TD
     end
 
     %% Ecossistema Docker
-    subgraph Docker ["🐳 Ecossistema Docker e container "]
+    subgraph Docker ["🐳 Ecossistema Docker"]
         
-        subgraph FE_Container ["🐳 Container frontend (Port: 3000)"]
+        subgraph FE_Container ["🐳 frontend (Port: 3000)"]
             NextApp["Next.js App + Axios Client"]
         end
 
-        subgraph BE_Container ["🐳 Backend Container (Port: 8000)"]
+        subgraph BE_Container ["🐳 Backend (Port: 8000)"]
             FlaskCore["Flask - api.py"]
             SwaggerUI["Flasgger / Swagger Docs"]
             
