@@ -112,7 +112,7 @@ graph TD
     end
 
     %% Conexões e Fluxos
-    UI -->|HTTPS / Axios + Bearer Token| NextApp
+    UI -->|HTTP / Axios + Bearer Token| NextApp
     AuthUI -->|Salva Credenciais| Store
     NextApp -->|REST API Calls| FlaskCore
     
